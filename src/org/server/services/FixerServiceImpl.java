@@ -75,7 +75,7 @@ public class FixerServiceImpl extends ConverterService {
 	private String calcChange(double currVal, double prevVal) {
 		double diff = currVal - prevVal;
 		double prcnt = 100.0 * diff / currVal;
-		DecimalFormat numberFormatter = new DecimalFormat("#.0000");
+		DecimalFormat numberFormatter = new DecimalFormat("#.00000");
 		return numberFormatter.format(diff) + "(" + numberFormatter.format(prcnt) + "%)";
 	}
 
