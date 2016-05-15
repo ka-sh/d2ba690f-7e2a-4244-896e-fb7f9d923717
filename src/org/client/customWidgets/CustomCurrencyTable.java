@@ -39,7 +39,7 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 
 	private void setHeader() {
 		this.setText(0, 0, "Currency");
-		this.setText(0, 1, "Price");
+		this.setText(0, 1, "Price (HKD)");
 		this.setText(0, 2, "Change");
 		this.setText(0, 3, "Remove");
 	}

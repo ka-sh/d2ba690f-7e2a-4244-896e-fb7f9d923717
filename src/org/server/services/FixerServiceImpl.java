@@ -111,7 +111,7 @@ public class FixerServiceImpl extends ConverterService {
 	 */
 	private String getPrevDate() {
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DAY_OF_MONTH, -7);
+		c.add(Calendar.MONTH, -1);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(c.getTime());
 	}

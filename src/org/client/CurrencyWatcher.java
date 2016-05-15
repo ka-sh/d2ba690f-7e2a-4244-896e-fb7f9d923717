@@ -41,7 +41,7 @@ public class CurrencyWatcher implements EntryPoint {
 	private NotificationService notificationService = new LabelNotificationService(notificationLbl);
 	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService, notificationService, styler);
 	private AddCurrencyEvent event = new AddCurrencyEvent(currencyTable, addSymbBtn, symbTxtBox, notificationService);
-	private Label historyNotification = new Label("All changes are calculated based on 1 week old historical data.");
+	private Label historyNotification = new Label("All changes are calculated based on 1 month old historical data.");
 
 	/**
 	 * This is the entry point method.
