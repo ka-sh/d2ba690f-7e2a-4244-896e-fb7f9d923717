@@ -5,12 +5,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Validator {
+	public final static String[] SUPPORTED_CURRENCIES = new String[] { "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
+			"DKK", "GBP", "HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN",
+			"RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR" };
 	/**
 	 * Supported currency for conversion.
 	 */
-	private final static Set<String> SUPPORTED = new HashSet<>(Arrays.asList(new String[] { "AUD", "BGN", "BRL", "CAD",
-			"CHF", "CNY", "CZK", "DKK", "GBP", "HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR",
-			"NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR" }));
+	private final static Set<String> SUPPORTED = new HashSet<>(Arrays.asList(SUPPORTED_CURRENCIES));
 
 	/**
 	 * Currency is only valid if it is only characters, and length is no long
@@ -31,7 +32,6 @@ public class Validator {
 	private static boolean IsValidFormat(String symbol) {
 		return symbol.trim().matches("^[A-Z\\.]{1,3}$");
 	}
-
 
 	/**
 	 * Incase of the user inserted more than 4 characters

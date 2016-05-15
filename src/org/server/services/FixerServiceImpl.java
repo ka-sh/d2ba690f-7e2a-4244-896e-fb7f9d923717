@@ -40,15 +40,23 @@ public class FixerServiceImpl extends ConverterService {
 			new FixerIORequest(getLatestReqLnk(symbolParams), LATEST_REQ_TYPE, responses, latch).start();
 			new FixerIORequest(getHistoricalReqLnk(symbolParams), HISTORICAL_REQ_TYPE, responses, latch).start();
 			latch.await();
-			Map<String, Double> latestVals = extractResponse(responses.get(LATEST_REQ_TYPE), symbols);
-			Map<String, Double> historicalVals = extractResponse(responses.get(HISTORICAL_REQ_TYPE), symbols);
-			return getCurrencies(latestVals, historicalVals, symbols);
+			if (isValidResponse(responses)) {
+				Map<String, Double> latestVals = extractResponse(responses.get(LATEST_REQ_TYPE), symbols);
+				Map<String, Double> historicalVals = extractResponse(responses.get(HISTORICAL_REQ_TYPE), symbols);
+				return getCurrencies(latestVals, historicalVals, symbols);
+			}
+
 		} catch (InterruptedException e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return getCurrenciesInCaseOfExp(symbols);
+
 		}
+		return getCurrenciesInCaseOfExp(symbols);
+	}
+
+	private boolean isValidResponse(Map<String, JsonObject> responses) {
+		return !responses.get(HISTORICAL_REQ_TYPE).isEmpty() && !responses.get(LATEST_REQ_TYPE).isEmpty();
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.client.events;
 
 import org.client.customWidgets.CurrencyTable;
+import org.client.services.NotificationService;
 import org.shared.Validator;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,21 +11,20 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class AddCurrencyEvent extends Composite implements ClickHandler, KeyUpHandler {
 	private final CurrencyTable table;
 	private final Button addSymbolBtn;
 	private final TextBox symbolTxtBox;
-	private final Label notificationLbl;
+	private final NotificationService notificationService;
 
 	public AddCurrencyEvent(CurrencyTable currencyTable, Button addSymblBtn, TextBox symbolTxtBox,
-			Label notificationLbl) {
+			NotificationService notificationService) {
 		this.table = currencyTable;
 		this.addSymbolBtn = addSymblBtn;
 		this.symbolTxtBox = symbolTxtBox;
-		this.notificationLbl = notificationLbl;
+		this.notificationService = notificationService;
 		this.addSymbolBtn.addClickHandler(this);
 		this.symbolTxtBox.addKeyUpHandler(this);
 
@@ -51,10 +51,10 @@ public class AddCurrencyEvent extends Composite implements ClickHandler, KeyUpHa
 		}
 		String symbol = input.toUpperCase();
 		if (Validator.isValidSymbol(symbol)) {
-			this.notificationLbl.setText("");
+			this.notificationService.clear();
 			this.table.addCurrency(symbol);
 		} else {
-			this.notificationLbl.setText(("Invalid Currency : " + Validator.trimInput(symbol)));
+			this.notificationService.notifyInvalidCurrency(Validator.trimInput(symbol));
 		}
 	}
 

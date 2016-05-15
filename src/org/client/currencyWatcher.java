@@ -7,6 +7,8 @@ import org.client.customWidgets.CustomCurrencyTable;
 import org.client.events.AddCurrencyEvent;
 import org.client.services.CurrencyConverterService;
 import org.client.services.CurrencyConverterServiceAsync;
+import org.client.services.LabelNotificationService;
+import org.client.services.NotificationService;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -26,15 +28,16 @@ import com.google.gwt.user.client.ui.Widget;
 public class currencyWatcher implements EntryPoint {
 	private final CurrencyConverterServiceAsync currencyService = GWT.create(CurrencyConverterService.class);
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService);
+
 	private HorizontalPanel addCurrencyPanel = new HorizontalPanel();
 	private Label lastUpdateLbl = new Label();
 	private Label notificationLbl = new Label();
-	private static int REFRESH_INTERVALS = 10000;
+	private static int REFRESH_INTERVALS = 15000;
 	private Button addSymbBtn = new Button("Add");
 	private TextBox symbTxtBox = new TextBox();
-	private AddCurrencyEvent event = new AddCurrencyEvent(currencyTable, addSymbBtn, symbTxtBox, notificationLbl);
-	
+	private NotificationService notificationService = new LabelNotificationService(notificationLbl);
+	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService, notificationService);
+	private AddCurrencyEvent event = new AddCurrencyEvent(currencyTable, addSymbBtn, symbTxtBox, notificationService);
 
 	/**
 	 * This is the entry point method.

@@ -3,6 +3,7 @@ package org.client.customWidgets;
 import java.util.ArrayList;
 
 import org.client.services.CurrencyConverterServiceAsync;
+import org.client.services.NotificationService;
 import org.shared.Currency;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,15 +18,17 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 	private final static int VAL_COLUMN = 1;
 	private final static int CHANGE_COL = 2;
 	private final static int Remove_Column = 3;
-	private final CurrencyConverterServiceAsync converterSrvs;
+	private final CurrencyConverterServiceAsync converterService;
+	private final NotificationService notificationService;
 
-	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs) {
+	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs, NotificationService notificationService) {
 		this.symbols = new ArrayList<>();
 		this.setText(0, 0, "Currency");
 		this.setText(0, 1, "Price");
 		this.setText(0, 2, "Change");
 		this.setText(0, 3, "Remove");
-		this.converterSrvs = converterSrvs;
+		this.converterService = converterSrvs;
+		this.notificationService = notificationService;
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 
 	public void refreshPriceLists() {
 		if (!this.symbols.isEmpty()) {
-			this.converterSrvs.getCurrencyValue(this.symbols.toArray(new String[symbols.size()]),
+			this.converterService.getCurrencyValue(this.symbols.toArray(new String[symbols.size()]),
 					new AsyncCallback<Currency[]>() {
 
 						@Override
@@ -88,8 +91,14 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 	public void refreshRow(Currency currency) {
 		int index = symbols.indexOf(currency.getSymbol());
 		if (index > -1) {
-			this.setText(index + 1, VAL_COLUMN, currency.getCurrentVal());
-			this.setText(index + 1, CHANGE_COL, currency.getChange());
+			if (currency.getChange().equals("-1") || currency.getCurrentVal().equals("-1")) {
+				notificationService.notifyServerError();
+			}else{
+				notificationService.clearServerErrorNotification();
+				this.setText(index + 1, VAL_COLUMN, currency.getCurrentVal());
+				this.setText(index + 1, CHANGE_COL, currency.getChange());	
+			}
+			
 		}
 	}
 

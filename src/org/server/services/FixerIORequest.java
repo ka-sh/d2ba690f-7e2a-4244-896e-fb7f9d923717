@@ -38,10 +38,11 @@ public class FixerIORequest extends Thread {
 			HttpURLConnection c = (HttpURLConnection) url.openConnection();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(c.getInputStream()));
 			this.response.put(requestType, JsonObject.parse(reader));
-			latch.countDown();
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.response.put(requestType,null);
+			this.response.put(requestType, new JsonObject());
+		} finally {
+			latch.countDown();
 		}
 	}
 }
