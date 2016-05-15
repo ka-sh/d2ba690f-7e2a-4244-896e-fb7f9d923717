@@ -9,6 +9,8 @@ import org.client.services.CurrencyConverterService;
 import org.client.services.CurrencyConverterServiceAsync;
 import org.client.services.LabelNotificationService;
 import org.client.services.NotificationService;
+import org.client.services.StandardStyler;
+import org.client.services.StylerService;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,10 +27,10 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class currencyWatcher implements EntryPoint {
+public class CurrencyWatcher implements EntryPoint {
 	private final CurrencyConverterServiceAsync currencyService = GWT.create(CurrencyConverterService.class);
 	private VerticalPanel mainPanel = new VerticalPanel();
-
+	private StylerService styler = new StandardStyler();
 	private HorizontalPanel addCurrencyPanel = new HorizontalPanel();
 	private Label lastUpdateLbl = new Label();
 	private Label notificationLbl = new Label();
@@ -36,7 +38,7 @@ public class currencyWatcher implements EntryPoint {
 	private Button addSymbBtn = new Button("Add");
 	private TextBox symbTxtBox = new TextBox();
 	private NotificationService notificationService = new LabelNotificationService(notificationLbl);
-	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService, notificationService);
+	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService, notificationService, styler);
 	private AddCurrencyEvent event = new AddCurrencyEvent(currencyTable, addSymbBtn, symbTxtBox, notificationService);
 
 	/**
@@ -60,6 +62,7 @@ public class currencyWatcher implements EntryPoint {
 	private void initAddSymbolPanel() {
 		this.addCurrencyPanel.add(addSymbBtn);
 		this.addCurrencyPanel.add(symbTxtBox);
+		styler.styleAddPanel(addCurrencyPanel);
 	}
 
 	private void initMainPanel() {

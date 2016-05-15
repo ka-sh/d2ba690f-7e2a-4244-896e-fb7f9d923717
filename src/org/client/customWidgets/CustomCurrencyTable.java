@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.client.services.CurrencyConverterServiceAsync;
 import org.client.services.NotificationService;
+import org.client.services.StylerService;
 import org.shared.Currency;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -11,6 +12,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Label;
 
 public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 	private ArrayList<String> symbols;
@@ -20,8 +22,8 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 	private final static int Remove_Column = 3;
 	private final CurrencyConverterServiceAsync converterService;
 	private final NotificationService notificationService;
-
-	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs, NotificationService notificationService) {
+private final StylerService styler;
+	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs, NotificationService notificationService,StylerService styler) {
 		this.symbols = new ArrayList<>();
 		this.setText(0, 0, "Currency");
 		this.setText(0, 1, "Price");
@@ -29,6 +31,11 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 		this.setText(0, 3, "Remove");
 		this.converterService = converterSrvs;
 		this.notificationService = notificationService;
+		/**
+		 * Add CSS styles
+		 */
+		this.styler=styler;
+		this.styler.styleCurrencyTabel(this);
 	}
 
 	@Override
@@ -54,20 +61,25 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 
 	public void refreshPriceLists() {
 		if (!this.symbols.isEmpty()) {
-			this.converterService.getCurrencyValue(this.symbols.toArray(new String[symbols.size()]),
-					new AsyncCallback<Currency[]>() {
+			try {
+				this.converterService.getCurrencyValue(this.symbols.toArray(new String[symbols.size()]),
+						new AsyncCallback<Currency[]>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
+							@Override
+							public void onFailure(Throwable caught) {
+								notificationService.notifyServerError();
+							}
 
-						}
+							@Override
+							public void onSuccess(Currency[] result) {
+								updateTable(result);
+							}
+						});
+			} catch (Throwable e) {
+				notificationService.notifyServerError();
+				e.printStackTrace();
+			}
 
-						@Override
-						public void onSuccess(Currency[] result) {
-							updateTable(result);
-						}
-					});
 		}
 
 	}
@@ -93,12 +105,14 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 		if (index > -1) {
 			if (currency.getChange().equals("-1") || currency.getCurrentVal().equals("-1")) {
 				notificationService.notifyServerError();
-			}else{
+			} else {
 				notificationService.clearServerErrorNotification();
 				this.setText(index + 1, VAL_COLUMN, currency.getCurrentVal());
-				this.setText(index + 1, CHANGE_COL, currency.getChange());	
+				Label changeLabl = new Label(currency.getChange());
+				styler.styleChangeWidget(changeLabl);
+				this.setWidget(index + 1, CHANGE_COL, changeLabl);
 			}
-			
+
 		}
 	}
 

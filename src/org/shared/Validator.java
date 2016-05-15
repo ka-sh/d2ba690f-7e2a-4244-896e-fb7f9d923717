@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Validator {
-	public final static String[] SUPPORTED_CURRENCIES = new String[] { "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
+	public final static String[] SUPPORTED_CURRENCIES = new String[] {"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
 			"DKK", "GBP", "HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN",
 			"RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR" };
 	/**

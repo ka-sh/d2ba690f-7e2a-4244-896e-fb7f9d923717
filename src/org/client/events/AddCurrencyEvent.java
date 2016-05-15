@@ -49,6 +49,7 @@ public class AddCurrencyEvent extends Composite implements ClickHandler, KeyUpHa
 		if (input == null) {
 			return;
 		}
+		this.symbolTxtBox.setText("");
 		String symbol = input.toUpperCase();
 		if (Validator.isValidSymbol(symbol)) {
 			this.notificationService.clear();
