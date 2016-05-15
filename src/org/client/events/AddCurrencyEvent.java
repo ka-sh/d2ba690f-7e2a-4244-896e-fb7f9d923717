@@ -11,15 +11,15 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.SuggestBox;
 
 public class AddCurrencyEvent extends Composite implements ClickHandler, KeyUpHandler {
 	private final CurrencyTable table;
 	private final Button addSymbolBtn;
-	private final TextBox symbolTxtBox;
+	private final SuggestBox symbolTxtBox;
 	private final NotificationService notificationService;
 
-	public AddCurrencyEvent(CurrencyTable currencyTable, Button addSymblBtn, TextBox symbolTxtBox,
+	public AddCurrencyEvent(CurrencyTable currencyTable, Button addSymblBtn, SuggestBox symbolTxtBox,
 			NotificationService notificationService) {
 		this.table = currencyTable;
 		this.addSymbolBtn = addSymblBtn;

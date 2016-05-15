@@ -22,20 +22,26 @@ public class CustomCurrencyTable extends FlexTable implements CurrencyTable {
 	private final static int Remove_Column = 3;
 	private final CurrencyConverterServiceAsync converterService;
 	private final NotificationService notificationService;
-private final StylerService styler;
-	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs, NotificationService notificationService,StylerService styler) {
+	private final StylerService styler;
+
+	public CustomCurrencyTable(CurrencyConverterServiceAsync converterSrvs, NotificationService notificationService,
+			StylerService styler) {
 		this.symbols = new ArrayList<>();
-		this.setText(0, 0, "Currency");
-		this.setText(0, 1, "Price");
-		this.setText(0, 2, "Change");
-		this.setText(0, 3, "Remove");
+		setHeader();
 		this.converterService = converterSrvs;
 		this.notificationService = notificationService;
 		/**
 		 * Add CSS styles
 		 */
-		this.styler=styler;
+		this.styler = styler;
 		this.styler.styleCurrencyTabel(this);
+	}
+
+	private void setHeader() {
+		this.setText(0, 0, "Currency");
+		this.setText(0, 1, "Price");
+		this.setText(0, 2, "Change");
+		this.setText(0, 3, "Remove");
 	}
 
 	@Override
@@ -59,22 +65,12 @@ private final StylerService styler;
 		return true;
 	}
 
+	@Override
 	public void refreshPriceLists() {
 		if (!this.symbols.isEmpty()) {
 			try {
 				this.converterService.getCurrencyValue(this.symbols.toArray(new String[symbols.size()]),
-						new AsyncCallback<Currency[]>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								notificationService.notifyServerError();
-							}
-
-							@Override
-							public void onSuccess(Currency[] result) {
-								updateTable(result);
-							}
-						});
+						new UpdateTableCallBack());
 			} catch (Throwable e) {
 				notificationService.notifyServerError();
 				e.printStackTrace();
@@ -84,23 +80,13 @@ private final StylerService styler;
 
 	}
 
-	/**
-	 * Update all table currencies
-	 * 
-	 * @param currencies
-	 */
-	public void updateTable(Currency[] currencies) {
+	private void updateTable(Currency[] currencies) {
 		for (Currency currency : currencies) {
 			refreshRow(currency);
 		}
 	}
 
-	/**
-	 * Update single row
-	 * 
-	 * @param currency
-	 */
-	public void refreshRow(Currency currency) {
+	private void refreshRow(Currency currency) {
 		int index = symbols.indexOf(currency.getSymbol());
 		if (index > -1) {
 			if (currency.getChange().equals("-1") || currency.getCurrentVal().equals("-1")) {
@@ -136,6 +122,18 @@ private final StylerService styler;
 			removeCurrency(symbol);
 		}
 
+	}
+
+	private class UpdateTableCallBack implements AsyncCallback<Currency[]> {
+		@Override
+		public void onFailure(Throwable caught) {
+			notificationService.notifyServerError();
+		}
+
+		@Override
+		public void onSuccess(Currency[] result) {
+			updateTable(result);
+		}
 	}
 
 }

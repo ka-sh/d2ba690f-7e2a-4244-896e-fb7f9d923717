@@ -2,7 +2,7 @@ package org.client.services;
 
 import java.util.Arrays;
 
-import org.shared.Validator;
+import org.shared.SupportedCurrencies;
 
 import com.google.gwt.user.client.ui.Label;
 
@@ -31,7 +31,7 @@ public class LabelNotificationService implements NotificationService {
 
 	@Override
 	public void notifyInvalidCurrency(String symbol) {
-		this.notificationLbl.setText("Invalid currency " + symbol + "\n Supported currencies: " + Arrays.toString(Validator.SUPPORTED_CURRENCIES));
+		this.notificationLbl.setText("Invalid currency " + symbol + "\n Supported currencies: " + Arrays.toString(SupportedCurrencies.CURRENCIES));
 	}
 
 	@Override

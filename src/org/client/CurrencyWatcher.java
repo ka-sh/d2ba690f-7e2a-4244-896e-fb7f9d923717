@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.client.customWidgets.CurrencyTable;
 import org.client.customWidgets.CustomCurrencyTable;
+import org.client.customWidgets.SymbolsSuggestBox;
 import org.client.events.AddCurrencyEvent;
 import org.client.services.CurrencyConverterService;
 import org.client.services.CurrencyConverterServiceAsync;
@@ -11,6 +12,7 @@ import org.client.services.LabelNotificationService;
 import org.client.services.NotificationService;
 import org.client.services.StandardStyler;
 import org.client.services.StylerService;
+import org.shared.SupportedCurrencies;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -20,7 +22,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,10 +37,11 @@ public class CurrencyWatcher implements EntryPoint {
 	private Label notificationLbl = new Label();
 	private static int REFRESH_INTERVALS = 15000;
 	private Button addSymbBtn = new Button("Add");
-	private TextBox symbTxtBox = new TextBox();
+	private SymbolsSuggestBox symbTxtBox = new SymbolsSuggestBox(SupportedCurrencies.CURRENCIES);
 	private NotificationService notificationService = new LabelNotificationService(notificationLbl);
 	private CurrencyTable currencyTable = new CustomCurrencyTable(currencyService, notificationService, styler);
 	private AddCurrencyEvent event = new AddCurrencyEvent(currencyTable, addSymbBtn, symbTxtBox, notificationService);
+	private Label historyNotification = new Label("All changes are calculated based on 1 week old historical data.");
 
 	/**
 	 * This is the entry point method.
@@ -66,10 +68,12 @@ public class CurrencyWatcher implements EntryPoint {
 	}
 
 	private void initMainPanel() {
+		this.mainPanel.add(historyNotification);
 		this.mainPanel.add((Widget) this.currencyTable);
 		this.mainPanel.add(this.addCurrencyPanel);
 		this.mainPanel.add(this.lastUpdateLbl);
 		this.mainPanel.add(this.notificationLbl);
+
 	}
 
 	private void initRootPanel() {

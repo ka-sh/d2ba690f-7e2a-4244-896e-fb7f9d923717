@@ -1,17 +1,6 @@
 package org.shared;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 public class Validator {
-	public final static String[] SUPPORTED_CURRENCIES = new String[] {"AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
-			"DKK", "GBP", "HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN",
-			"RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR" };
-	/**
-	 * Supported currency for conversion.
-	 */
-	private final static Set<String> SUPPORTED = new HashSet<>(Arrays.asList(SUPPORTED_CURRENCIES));
 
 	/**
 	 * Currency is only valid if it is only characters, and length is no long
@@ -26,7 +15,7 @@ public class Validator {
 			return false;
 		}
 
-		return SUPPORTED.contains(symbol);
+		return SupportedCurrencies.isSupported(symbol);
 	}
 
 	private static boolean IsValidFormat(String symbol) {
